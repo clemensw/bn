@@ -1,6 +1,6 @@
 use rand::Rng;
 use num::{BigUint, Num};
-use std::ops::{Mul,Add,Sub,Neg};
+use std::ops::{Mul, Add, Sub, Neg};
 use std::cmp::{PartialEq, Eq};
 use std::convert::From;
 use std::fmt;
@@ -15,7 +15,7 @@ pub trait PrimeFieldParams {
 
 pub struct Fp<P: PrimeFieldParams> {
     value: BigUint,
-    _marker: PhantomData<P>
+    _marker: PhantomData<P>,
 }
 
 impl<P: PrimeFieldParams> fmt::Debug for Fp<P> {
@@ -30,7 +30,7 @@ impl<P: PrimeFieldParams> Field for Fp<P> {
 
         Fp {
             value: BigUint::zero(),
-            _marker: PhantomData
+            _marker: PhantomData,
         }
     }
     fn one() -> Self {
@@ -38,16 +38,16 @@ impl<P: PrimeFieldParams> Field for Fp<P> {
 
         Fp {
             value: BigUint::one(),
-            _marker: PhantomData
+            _marker: PhantomData,
         }
     }
     fn random<R: Rng>(rng: &mut R) -> Self {
-        use num::num_bigint::RandBigInt;
+        use num::bigint::RandBigInt;
         use num::Zero;
 
         Fp {
             value: rng.gen_biguint_range(&BigUint::zero(), &P::modulus()),
-            _marker: PhantomData
+            _marker: PhantomData,
         }
     }
 
@@ -86,14 +86,14 @@ impl<P: PrimeFieldParams> Field for Fp<P> {
             } else {
                 P::modulus() - &self.value
             },
-            _marker: PhantomData
+            _marker: PhantomData,
         }
     }
 
     fn mul(&self, other: &Self) -> Self {
         Fp {
             value: (&self.value * &other.value) % &P::modulus(),
-            _marker: PhantomData
+            _marker: PhantomData,
         }
     }
 
@@ -101,12 +101,12 @@ impl<P: PrimeFieldParams> Field for Fp<P> {
         if other.value > self.value {
             Fp {
                 value: (&self.value + P::modulus()) - &other.value,
-                _marker: PhantomData
+                _marker: PhantomData,
             }
         } else {
             Fp {
                 value: &self.value - &other.value,
-                _marker: PhantomData
+                _marker: PhantomData,
             }
         }
     }
@@ -116,12 +116,12 @@ impl<P: PrimeFieldParams> Field for Fp<P> {
         if tmp >= P::modulus() {
             Fp {
                 value: tmp - P::modulus(),
-                _marker: PhantomData
+                _marker: PhantomData,
             }
         } else {
             Fp {
                 value: tmp,
-                _marker: PhantomData
+                _marker: PhantomData,
             }
         }
     }
@@ -150,7 +150,7 @@ impl<'a, P: PrimeFieldParams> From<&'a str> for Fp<P> {
     fn from(s: &'a str) -> Self {
         Fp {
             value: BigUint::from_str_radix(s, 10).unwrap() % P::modulus(),
-            _marker: PhantomData
+            _marker: PhantomData,
         }
     }
 }
@@ -159,7 +159,7 @@ impl<P: PrimeFieldParams> Clone for Fp<P> {
     fn clone(&self) -> Self {
         Fp {
             value: self.value.clone(),
-            _marker: PhantomData
+            _marker: PhantomData,
         }
     }
 }
